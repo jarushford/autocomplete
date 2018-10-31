@@ -1,0 +1,19 @@
+{
+  "name": "@jarushford/autocomplete",
+  "version": "1.1.0",
+  "description": "Prefix Trie for Autocomplete",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jarushford/autocomplete.git"
+  },
+  "author": "Jamie Rushford",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jarushford/autocomplete/issues"
+  },
+  "homepage": "https://github.com/jarushford/autocomplete#readme"
+}

@@ -2,27 +2,71 @@ const Node = require('./Node');
 
 class Trie {
   constructor() {
-    // what instance properties shall we set?
+    this.wordCount = 0;
+    this.root = new Node().children;
   }
 
   insert(word) {
-    // insert should take in a word and insert it into the trie
+    let letters = word.split('');
+    let currentNode = this.root;
+
+    while (letters.length) {
+      let currentLetter = letters.shift();
+
+      if (!currentNode[currentLetter]) {
+        currentNode[currentLetter] = new Node();
+      }
+
+      if (!letters.length && !currentNode[currentLetter].completeWord) {
+        this.wordCount++;
+        currentNode[currentLetter].completeWord = word;
+      }
+
+      currentNode = currentNode[currentLetter].children;
+    }
   }
 
   traverseDown(word) {
-    // traverseDown should take in a word and navigate down
-    // the tree until it is at the Node that represents the
-    // final letter of the word passed in
+    let letters = word.split('');
+    let currentNode = this.root;
+
+    while (letters.length) { 
+      let currentLetter = letters.shift();
+
+      // try to find the currentLetter in the children of our currentNode
+      let foundLetter = Object.keys(currentNode).find(letter => 
+        letter === currentLetter);
+
+      // if it finds it, reset the current node to that child's children
+      if (foundLetter) {
+        currentNode = currentNode[currentLetter].children;
+      }
+    }
+
+    return currentNode;
   }
 
   findWords(currentNode, suggestions) {
-    // find words should take in a currentNode (wherever we are in 
-    // our trie at the moment) and check for all the completeWord values
-    // that exist on any branch 
+    let letters = Object.keys(currentNode);
+
+    letters.forEach(letter => {
+      if (currentNode[letter].completeWord) {
+        suggestions.push(currentNode[letter].completeWord);
+      }
+
+      // if there are more children beneath our currentNode[letter]
+      if (Object.keys(currentNode[letter].children).length) {
+        this.findWords(currentNode[letter].children, suggestions);
+      }
+    });
+
+    return suggestions;
   }
 
   suggest(prefix) { 
-    // pseucode here
+    let currentNode = this.traverseDown(prefix);
+
+    return this.findWords(currentNode, []);
   }
 
   populate(words) {
